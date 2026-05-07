@@ -68,6 +68,30 @@ Editor de diseño visual interactivo construido con **Fabric.js 5.3.1** sobre ca
 
 ---
 
+## Notas técnicas y autocrítica
+
+Camiglobo es mi primer proyecto full stack y refleja mi proceso real de aprendizaje. Por transparencia técnica, dejo aquí un análisis honesto:
+
+**Arquitectura actual**
+- PHP procedural sin framework, estructura monolítica con front controllers planos.
+- Empecé el desarrollo antes de conocer en profundidad patrones MVC y arquitectura por capas.
+- Las consultas a base de datos se realizan con PDO preparadas (seguras) pero inline, sin patrón Repository.
+
+**Lo que aprendí priorizando "envío real" sobre "código perfecto"**
+
+Decidí desplegar y mantener el proyecto en producción mientras lo construía, en vez de dedicar tiempo a refactorizar antes de lanzar. Esa decisión me obligó a aprender lo que ningún curso enseña: cumplir plazos, resolver bugs en caliente, gestionar usuarios reales, manejar incidencias de pagos y mantener un sitio vivo. Hoy considero que esa decisión fue correcta — un proyecto incompleto con arquitectura limpia hubiera enseñado mucho menos.
+
+**Lo que mejoraría si lo hiciera hoy**
+- Separación estricta MVC con un router central y controllers desacoplados.
+- Agrupar archivos por dominio (productos, pedidos, usuarios, personalizador) en subcarpetas.
+- Patrón Repository para aislar el acceso a datos de la lógica de negocio.
+- Tests unitarios y de integración (PHPUnit).
+- Composer y autoloading PSR-4 para gestión de dependencias.
+
+**Mi siguiente proyecto** (en formación con Vue.js — IFCD65) ya está pensado con arquitectura por componentes, separación de concerns, gestión de estado centralizada y tests desde el día 1.
+
+---
+
 ## Autor
 
 **Juan Manuel Casanova Lacasa** — Desarrollador Web Full Stack  
