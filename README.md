@@ -55,16 +55,113 @@ Editor de diseño visual interactivo construido con **Fabric.js 5.3.1** sobre ca
 
 ## Estructura del proyecto
 
+> Más de 70 archivos PHP organizados por funcionalidad. Estructura plana (sin framework MVC) heredada del proceso orgánico de aprendizaje (ver «Notas técnicas y autocrítica» más abajo).
+
 ```
-├── admin/               # Panel de administración
-├── includes/            # PHPMailer, configuración, helpers
-├── images/              # Recursos gráficos
-├── carrito.php          # Gestión del carrito
-├── checkout.php         # Proceso de compra
-├── config.php           # Configuración de base de datos
-├── personalizador.php   # Herramienta de personalización
-└── .htaccess            # Seguridad y redirecciones
+camiglobo/
+│
+├── 🏠 PÁGINAS PÚBLICAS
+│   ├── index.php                      # Home con hero y productos destacados
+│   ├── productos.php                  # Catálogo con filtros y búsqueda
+│   ├── producto.php                   # Detalle de producto individual
+│   ├── personalizar.php               # Editor visual (Fabric.js, 7.878 líneas)
+│   ├── carrito.php                    # Vista del carrito
+│   ├── checkout.php                   # Proceso de compra
+│   ├── gracias.php                    # Confirmación post-compra
+│   ├── contacto.php                   # Formulario de contacto
+│   └── faq.php                        # Preguntas frecuentes
+│
+├── 👤 SISTEMA DE USUARIOS
+│   ├── login.php                      # Vista de login
+│   ├── registro.php                   # Vista de registro
+│   ├── recuperar.php                  # Solicitud de recuperación
+│   ├── restablecer.php                # Restablecer contraseña con token
+│   ├── perfil.php                     # Panel del usuario
+│   ├── mi_pedido_detalle.php          # Detalle de pedido (cliente)
+│   ├── cancelar_pedido.php            # Cancelar pedido propio
+│   ├── baja.php                       # Eliminar cuenta (GDPR)
+│   └── logout.php
+│
+├── 🛒 GESTIÓN DE CARRITO Y PEDIDOS
+│   ├── carrito_accion.php             # Añadir/eliminar/modificar items
+│   └── carrito_modificar.php          # Cambio de cantidades
+│
+├── 🎨 PERSONALIZADOR (DISEÑOS Y RECURSOS)
+│   ├── guardar_diseno.php             # Guarda diseño final como PNG
+│   ├── guardar_progreso.php           # Auto-save JSON del editor en BD
+│   ├── subir_recurso.php              # Upload de imagen del usuario
+│   ├── borrar_recurso.php             # Elimina recurso de la biblioteca
+│   ├── obtener_recursos.php           # API: lista recursos del usuario
+│   └── obtener_productos.php          # API: lista de productos
+│
+├── ⚙️ PROCESADORES POST (lógica de servidor)
+│   ├── procesar_login.php             # Validar credenciales + sesión
+│   ├── procesar_registro.php          # Crear usuario + reCAPTCHA
+│   ├── procesar_google.php            # OAuth 2.0 con Google
+│   ├── procesar_recuperar.php         # Generar token de recuperación
+│   ├── procesar_nueva_clave.php       # Cambiar contraseña con token
+│   ├── procesar_perfil.php            # Actualizar datos del usuario
+│   ├── procesar_pedido.php            # Crear pedido + transacción atómica
+│   ├── procesar_pago.php              # Verificación S2S de PayPal
+│   └── procesar_newsletter.php        # Suscripción al newsletter
+│
+├── 🔐 ADMINISTRACIÓN
+│   ├── admin_pedidos.php              # Listado de pedidos
+│   ├── admin_productos.php            # CRUD de productos
+│   ├── admin_pagos.php                # Pagos y reembolsos
+│   ├── admin_biblioteca.php           # Recursos subidos por usuarios
+│   ├── enviar_masivo.php              # Envío masivo de newsletter
+│   ├── lista_clientes_secreta.php     # Listado de clientes (admin)
+│   ├── save-products.php              # Endpoint de guardado de productos
+│   └── admin/
+│       ├── ver_pedido.php             # Detalle de pedido (admin)
+│       └── cambiar_estado.php         # Cambiar estado de pedido
+│
+├── 📄 PÁGINAS LEGALES (LSSI-CE / RGPD)
+│   ├── aviso-legal.php
+│   ├── politica-privacidad.php
+│   ├── politica-envios.php
+│   ├── politica-reembolso.php
+│   └── terminos-condiciones.php
+│
+├── 🌐 SEO
+│   ├── sitemap.php                    # Sitemap visible
+│   ├── sitemap_xml.php                # Sitemap.xml para Search Console
+│   └── robots.txt
+│
+├── 🧩 INCLUDES (núcleo común)
+│   ├── config.php                     # 510 líneas. PDO, sesiones, CSRF,
+│   │                                  #   helpers globales: h(), auditLog(),
+│   │                                  #   enviarEmail(), validarRecaptcha()
+│   ├── header.php                     # 602 líneas. Navbar + meta + búsqueda
+│   ├── footer.php                     # Pie con redes sociales
+│   ├── pricing.php                    # 59 líneas. Cálculo dinámico de precio
+│   ├── colors.php                     # Paleta de colores y gradientes del editor
+│   ├── PHPMailer/                     # Librería de envío de emails (SMTP)
+│   ├── .env-example                   # Plantilla de variables de entorno
+│   └── .htaccess                      # Bloquea acceso directo
+│
+├── 📦 RECURSOS Y SUBIDAS
+│   ├── images/                        # Logo y assets gráficos
+│   ├── uploads/
+│   │   ├── .htaccess                  # Bloquea ejecución de scripts en uploads
+│   │   ├── custom/                    # Diseños PNG generados por el editor
+│   │   └── recursos/                  # Imágenes subidas por usuarios
+│   ├── common.min.css                 # CSS principal del sitio
+│   └── favicon.jpg
+│
+├── 🛠️ OTROS
+│   ├── upload.php                     # Endpoint de subida (uso interno)
+│   └── ver_detalles.php               # Vista auxiliar de detalles
+│
+├── 📚 DOCUMENTACIÓN Y CONFIG
+│   ├── README.md                      # Este archivo
+│   ├── DOCUMENTACION_ENTREGA.html     # Doc técnica con pestañas (94 KB)
+│   ├── .htaccess                      # Configuración de seguridad raíz
+│   └── .gitignore
 ```
+
+**Tamaño aproximado del código**: ~600 KB de PHP, ~17 KB de CSS minificado, librería PHPMailer + Fabric.js (CDN).
 
 ---
 
